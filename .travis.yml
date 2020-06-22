@@ -1,0 +1,16 @@
+services:
+- docker
+
+script:
+# build new image
+- docker build --rm=true -t mpjaramillo/blockchainedu:latest
+
+jobs:
+  include:
+  # push image to dockerhub
+  - stage: build-push
+    if: branch = master AND type != pull_request
+    script:
+    - docker login -u $mpjaramillo -p $mp0980063288
+    - docker build --rm=true -t mpjaramillo/blockchainedu:latest .
+    - docker push mpjaramillo/blockchainedu:latest
